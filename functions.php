@@ -10,6 +10,13 @@ function marsuniversity_files() {
     wp_enqueue_style('university_main_styles', get_stylesheet_uri(), NULL, microtime());
 }
 
-add_action('wp_enqueue_scripts', 'marsuniversity_files'); //wordpress will decide when to call the functioin
+add_action('wp_enqueue_scripts', 'marsuniversity_files'); //wordpress will decide when to call the functioin, during wp enqueue scripts event
+
+function marsuniversity_features() {
+    add_theme_support('title-tag');
+}
+
+//add matching title tag to each opened file
+add_action('after_setup_theme', 'marsuniversity_features');
 
 ?>
