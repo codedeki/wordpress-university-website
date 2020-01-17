@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php language_attributes();?>">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="<?php bloginfo('charset');?>">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <?php wp_head(); ?>
 </head>
-<body>
+<!-- body class adds more information about each page -->
+<body <?php body_class();?>> 
 <header class="site-header">
     <div class="container">
       <h1 class="school-logo-text float-left"><a href="<?php echo site_url();?>"><strong>Mars</strong> University</a></h1>
@@ -15,14 +16,21 @@
       <div class="site-header__menu group">
         <nav class="main-navigation">
           <ul>
-            <li><a href="<?php echo site_url('/about-us');?>">About Us</a></li>
+          <!-- if we want to make custom wordpress menu rather than hardcoding li's 
+          <?php 
+            wp_nav_menu(array(
+              'theme-location' => 'headerMenuLocation' 
+            ));
+          ?>  -->
+            <li <?php if(is_page('about-us') or wp_get_post_parent_id(0) == 12)     echo 'class="current-menu-item"'?>><a href="<?php echo site_url('/    about-us');?>">About Us</a></li>
             <li><a href="<?php echo site_url('/programs')?>">Programs</a></li>
             <li><a href="<?php echo site_url('/events')?>">Events</a></li> 
             <li><a href="<?php echo site_url('/campuses')?>">Campuses</a></li>
-            <li><a href="<?php echo site_url('/blogs')?>">Blog</a></li>
+            <li <?php if(get_post_type() == 'post') 
+              echo 'class="current-menu-item"'?>><a href="<?php echo site_url('/blog')?>">Blog</a></li> 
           </ul>
         </nav>
-        <div class="site-header__util">
+        <div class="site-header__util"> 
           <a href="#" class="btn btn--small btn--orange float-left push-right">Login</a>
           <a href="#" class="btn btn--small  btn--dark-orange float-left">Sign Up</a>
           <span class="search-trigger js-search-trigger"><i class="fa fa-search" aria-hidden="true"></i></span>

@@ -5,7 +5,7 @@ get_header();
 while(have_posts()) {
     the_post(); ?>
  <div class="page-banner">
-    <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images.ocean.jpg')?>);"></div>  
+    <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/ocean.jpg')?>);"></div>  
     <div class="page-banner__content container container--narrow">
       <h1 class="page-banner__title"><?php the_title(); ?></h1>
       <div class="page-banner__intro">
@@ -25,14 +25,35 @@ while(have_posts()) {
      <?   }
     ?>
 
+    <?php 
+    $testArray = get_pages(array(
+      'child_of' => get_the_ID() 
+    ));
     
-    <!-- <div class="page-links">
-      <h2 class="page-links__title"><a href="#">About Us</a></h2>
+    // <!-- adds permalinks for pages that do have a parent or child -->
+    // if false returns nothing, removing the permalinks from pages without parent or child
+    if($theParentId or $testArray) { ?>
+    <div class="page-links">
+      <h2 class="page-links__title"><a href="<?php echo get_permalink($theParentId);?>"><?php echo get_the_title($theParentId);?></a></h2>
       <ul class="min-list">
-        <li class="current_page_item"><a href="#">Our History</a></li>
-        <li><a href="#">Our Goals</a></li>
+          <?php 
+            if($theParentId) {
+              $findChildrenOf = $theParentId;  //if on parent post, get the ID of parent; else get ID of the current page which happens to be the child page
+            } else {
+              $findChildrenOf = get_the_ID(); //store in variable so the function doesn't echo all ID's of every page we have in WordPress
+
+            }
+
+            wp_list_pages(array(
+              'title_li' => NULL,
+              'child_of' => $findChildrenOf,
+              'sort_column' => 'menu_order'
+            )); //takes associative array
+          ?>
       </ul>
-    </div> -->
+    </div>
+    <?php } ?>
+  
 
     <div class="generic-content">
       <?php the_content(); ?>
