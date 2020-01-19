@@ -5,17 +5,37 @@ get_header(); ?>
 <div class="page-banner">
     <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/ocean.jpg') ?>);"></div>  
     <div class="page-banner__content container container--narrow">
-      <h1 class="page-banner__title">All Events</h1>
+      <h1 class="page-banner__title">Past Events</h1>
       <div class="page-banner__intro">
-        <p>See what is going on in our world.</p>
+        <p>A recap of our past events.</p>
       </div>
     </div>  
   </div>
 
   <div class="container container--narrow page-section">
   <?php 
-    while(have_posts()) {
-      the_post(); ?>
+
+    //create custom query for past-events
+    $today = date('Ymd');
+    $pastEvents = new WP_Query(array(
+        'paged' => get_query_var('paged', 1), //ensures pagination works
+        'posts_per_page' => 2,
+        'post_type' => 'event',
+        'meta_key' => 'event_date',
+        'orderby' => 'meta_value_num',  
+        'order' => 'ASC',
+        'meta_query' => array(
+        array( //only show posts that are greater than or equal to today's date
+            'key' => 'event_date',
+            'compare' => '<', //event date is less than today = a past event
+            'value' => $today,
+            'type' => 'numeric' //we are comparing numbers so add this
+        )
+        )
+    ));
+
+    while($pastEvents->have_posts()) {
+      $pastEvents->the_post(); ?>
           <div class="event-summary">
           <a class="event-summary__date t-center" href="#">
             <span class="event-summary__month"><?php 
@@ -30,13 +50,15 @@ get_header(); ?>
           </div>
         </div>
     <?php } 
-    echo paginate_links();
+    //for custom queries, we need to pass paramaters as array to page_links
+    echo paginate_links(array(
+        'total' => $pastEvents->max_num_pages
+    ));
   ?>
 
-  <hr class="section-break">
-  
-  <p>Looking for a recap of past events? <a href="<?php echo site_url('/past-events');?>"> Check out our past events archive</a></p>
+<hr class="section-break">
 
+ <a href="<?php echo site_url('/events');?>"> Back to All Events</a></>
   </div> 
 
 
