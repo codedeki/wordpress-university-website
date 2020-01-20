@@ -1,8 +1,9 @@
 <?php function university_post_types() {
+    //Event Post Type
     register_post_type('event', array(
         'supports' => array('title', 'editor', 'excerpt'), //custom fields: ACF or CMB2 plugins
-        'rewrite' => array('slug' => 'events'), //not working
-        'has_archive' => true, //not working
+        'rewrite' => array('slug' => 'events'), 
+        'has_archive' => true, 
         'public' => true,
         'labels' => array(
             'name' => 'Events',
@@ -13,6 +14,37 @@
         ),
         'menu_icon' => 'dashicons-calendar-alt' 
     ));
+
+    //Program Post Type
+    register_post_type('program', array(
+        'supports' => array('title', 'editor', 'excerpt'), //custom fields: ACF or CMB2 plugins
+        'rewrite' => array('slug' => 'programs'),
+        'has_archive' => true, 
+        'public' => true,
+        'labels' => array(
+            'name' => 'Programs',
+            'add_new_item' => 'Add New Program',
+            'edit_item' => 'Edit Program',
+            'all_items' => 'All Programs', 
+            'singular_name' => 'Program' 
+        ),
+        'menu_icon' => 'dashicons-awards' 
+    ));
+
+    //Professor Post Type
+    register_post_type('professor', array(
+        'supports' => array('title', 'editor', 'thumbnail'), //custom fields: ACF or CMB2 plugins
+        'public' => true,
+        'labels' => array(
+            'name' => 'Professors',
+            'add_new_item' => 'Add New Professor',
+            'edit_item' => 'Edit Professors',
+            'all_items' => 'All Professors',
+            'singular_name' => 'Professor' 
+        ),
+        'menu_icon' => 'dashicons-welcome-learn-more' 
+    ));
+
 } 
 
 add_action('init', 'university_post_types');

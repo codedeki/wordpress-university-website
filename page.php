@@ -3,16 +3,14 @@
 get_header(); 
 
 while(have_posts()) {
-    the_post(); ?>
- <div class="page-banner">
-    <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/ocean.jpg')?>);"></div>  
-    <div class="page-banner__content container container--narrow">
-      <h1 class="page-banner__title"><?php the_title(); ?></h1>
-      <div class="page-banner__intro">
-        <p><?php  ?>REPLACE LATER</p>
-      </div>
-    </div>  
-  </div>
+    the_post(); 
+    
+    pageBanner(array(
+      'photo' => 'https://images.unsplash.com/photo-1577464849471-8dc8be232176?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'
+    )); 
+    ?>
+ 
+ 
 
   <div class="container container--narrow page-section">
 

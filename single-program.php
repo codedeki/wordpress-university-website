@@ -3,18 +3,11 @@
 get_header();
 
 while(have_posts()) {
-    the_post(); ?>
-     
-    <div class="page-banner">
-    <div class="page-banner__bg-image" style="background-image: url(<?php echo get_theme_file_uri('/images/ocean.jpg') ?>);"></div>  
-    <div class="page-banner__content container container--narrow">
-      <h1 class="page-banner__title"><?php the_title(); ?></h1>
-      <div class="page-banner__intro">
-        <p>REPLACE LATER</p>
-      </div>
-    </div>  
-  </div>
-
+    the_post(); 
+    
+    pageBanner();
+    ?>
+ 
   <div class="container container--narrow page-section">
 
   <div class="metabox metabox--position-up metabox--with-home-link">
@@ -26,7 +19,42 @@ while(have_posts()) {
 
     <div class="generic-content"><?php the_content(); ?></div>
     
-    <?php 
+    <?php  
+    //Professors Custom Query
+          $relatedProfessors = new WP_Query(array(
+            'posts_per_page' => -1,
+            'post_type' => 'professor',
+            'orderby' => 'title',  
+            'order' => 'ASC',
+            'meta_query' => array(
+              array(
+                'key' =>'related_programs', //In Programs, showd any posts that have a relationship with a specific program (e.g. show posts that have the field 'Biology")
+                'compare'=>'LIKE',
+                'value'=>'"'. get_the_ID() . '"' //must get the in quotes since wordpress db stores id's in quotes
+              )
+            )
+          ));
+
+          if ($relatedProfessors->have_posts()) {
+            echo '<hr class="section-break">';
+          echo '<h2 class="headline headline--medium">' . get_the_title() . ' Professors</h2>';
+
+          echo '<ul class="professor-cards">';
+          while($relatedProfessors->have_posts()) {
+            $relatedProfessors->the_post(); ?> 
+            <li class="professor-card__list-item">
+              <a class="professor-card" href="<?php the_permalink(); ?>">
+                <img class="professor-card__image" src="<?php the_post_thumbnail_url('professorLandscape'); ?>" alt="">
+                <span class="professor-card__name"><?php the_title(); ?></span>
+              </a>
+            </li> 
+          <?php }
+            echo '</ul>';
+          }
+
+          wp_reset_postdata(); //must call this function when multiple custom queries are b/w each other in same file: resets id's and titles from one to the other
+        
+    //Events Custom Query
           $today = date('Ymd');
           $homepageEvents = new WP_Query(array(
             'posts_per_page' => 2,
