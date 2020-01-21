@@ -33,6 +33,7 @@ function pageBanner($args = NULL) { //set equal to NULL to avoid errors in case 
 function marsuniversity_files() {
     //wp_enqueue_script takes 3 arguments: dependancies? = Null; version? = '1.0' OR microtime(); load on bottom of page before closing body tag? = True.
     //microtime to prevent caching of files during development; remove at launch
+    wp_enqueue_script('googleMap', '//maps.googleapis.com/maps/api/js?key=ENTER API KEY', NULL, microtime(), true);
     wp_enqueue_script('university_main_js', get_theme_file_uri('/js/scripts-bundled.js'), NULL, microtime(), true);
     // load css or JS files NOT in index.html but in functions.php --gets css file from style.css
     wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
@@ -57,14 +58,22 @@ function marsuniversity_features() {
 //add matching title tag to each opened file
 add_action('after_setup_theme', 'marsuniversity_features'); //run our function after setup theme event
 
-//Program event display
+
 function university_adjust_queries($query) { 
+    
+    //Campus event display
+    if(!is_admin() AND is_post_type_archive('campus') AND $query->is_main_query()) {
+        $query->set('posts_per_page', -1);
+    }
+    
+    //Program event display
     if(!is_admin() AND is_post_type_archive('program') AND $query->is_main_query()) {
         $query->set('orderby', 'title');
         $query->set('order', 'ASC');
         $query->set('posts_per_page', -1);
     }
-//orders posts by event date and removes old dates in event archive; $query runs only on intended url; not globally or in the admin pages
+
+    //orders posts by event date and removes old dates in event archive; $query runs only on intended url; not globally or in the admin pages
     if(!is_admin() AND is_post_type_archive('event') AND $query->is_main_query()) {
         $today = date('Ymd');
         $query->set('meta_key', 'event_date'); 
@@ -85,4 +94,12 @@ function university_adjust_queries($query) {
 
 add_action('pre_get_posts', 'university_adjust_queries');
 
+
+function universityMapKey($api) {
+    $api['key'] = 'Enter API KEY';
+    return $api;
+}
+
+
+add_filter('acf/fields/google_map/api', 'universityMapKey' ); //google maps api
 ?>
