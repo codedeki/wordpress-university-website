@@ -16,7 +16,6 @@ register_post_type('campus', array(
    'menu_icon' => 'dashicons-location-alt' 
 ));
 
-
 //Event Post Type
 register_post_type('event', array(
    'supports' => array('title', 'editor', 'excerpt'), //custom fields: ACF or CMB2 plugins
@@ -51,6 +50,7 @@ register_post_type('program', array(
 
 //Professor Post Type
 register_post_type('professor', array(
+   'show_in_rest' => true,
    'supports' => array('title', 'editor', 'thumbnail'), //custom fields: ACF or CMB2 plugins
    'public' => true,
    'labels' => array(

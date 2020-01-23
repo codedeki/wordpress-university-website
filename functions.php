@@ -1,5 +1,15 @@
 <?php 
 
+require get_theme_file_path('/inc/search-route.php');
+
+function university_custom_rest() {
+    register_rest_field('post', 'authorName', array(
+        'get_callback' => function() {return get_the_author();} 
+    ));
+}
+
+add_action('rest_api_init', 'university_custom_rest');
+
 function pageBanner($args = NULL) { //set equal to NULL to avoid errors in case we call the function in other pages without any paramaters
     
     if (!$args['title']) {
@@ -37,8 +47,12 @@ function marsuniversity_files() {
     wp_enqueue_script('university_main_js', get_theme_file_uri('/js/scripts-bundled.js'), NULL, microtime(), true);  
     // load css or JS files NOT in index.html but in functions.php --gets css file from style.css
     wp_enqueue_style('custom-google-fonts', '//fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i|Roboto:100,300,400,400i,700,700i');
-    wp_enqueue_style('font-awesome','//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'); //get working later
+    wp_enqueue_style('font-awesome','//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
     wp_enqueue_style('university_main_styles', get_stylesheet_uri(), NULL, microtime());
+    //input js into html
+    wp_localize_script('university_main_js', 'universityData', array(
+        'root_url' => get_site_url()    //make dynamic relative link for deployement: invent key called root_url to store whatever site url the user enters; makes sure the user can dynamically load the JSON data from the HTTP request in Search.js getResults();
+    )); 
 }
 
 add_action('wp_enqueue_scripts', 'marsuniversity_files'); //wordpress will decide when to call the function, during wp enqueue scripts event
