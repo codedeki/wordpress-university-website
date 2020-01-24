@@ -29,7 +29,6 @@ class Search {
     // 3. methods (functions, action...)
 
     typingLogic() {
-        
         if(this.searchField.val() != this.previousValue) {
             clearTimeout(this.typingTimer);
             //outputs spinner animation
@@ -49,23 +48,63 @@ class Search {
     }
 
     getResults() {
-        //make dynamic relative link for deployement using our wp_localize_script function (universityData.root_url) in functions.php
-        $.when(
-            $.getJSON(universityData.root_url + '/wp-json/wp/v2/posts?search=' + this.searchField.val()),
-            $.getJSON(universityData.root_url + '/wp-json/wp/v2/pages?search=' + this.searchField.val())
-            ).then((posts, pages) => {
-            var combinedResults = posts[0].concat(pages[0]);
-            this.resultsDiv.html(`
+      //make dynamic relative link for deployement using our wp_localize_script function (universityData.root_url) in functions.php
+      $.getJSON(universityData.root_url + '/wp-json/university/v1/search?term=' + this.searchField.val(), data => {
+        this.resultsDiv.html(`
+          <div class="row">
+            <div class="one-third">
+              
               <h2 class="search-overlay__section-title">General Information</h2>
-              ${combinedResults.length ? '<ul class="link-list min-list">' : '<p>No general information matches that search.</p>'}
-                ${combinedResults.map(item => `<li><a href="${item.link}">${item.title.rendered}</a> ${item.type == 'post' ? `by ${item.authorName}` : ''}</li>`).join('')}
-              ${combinedResults.length ? '</ul>' : ''}
-            `);
-            this.isSpinnerVisible = false;
-          }, () => {
-            this.resultsDiv.html('<p>Unexpected error; please try again.</p>');
-          });
-        }
+              ${data.generalInfo.length ? '<ul class="link-list min-list">' : '<p>No general information matches that search.</p>'}
+              ${data.generalInfo.map(item => `<li><a href="${item.permalink}">${item.title}</a> ${item.postType == 'post' ? `by ${item.authorName}` : ''}</li>`).join('')}
+              ${data.generalInfo.length ? '</ul>' : ''}
+            </div>
+
+            <div class="one-third">
+              <h2 class="search-overlay__section-title">Programs</h2>
+              ${data.programs.length ? '<ul class="link-list min-list">' : `<p>No programs match that search. <a href="${universityData.root_url}/programs">View all programs</a></p>`}
+              ${data.programs.map(item => `<li><a href="${item.permalink}">${item.title}</a></li>`).join('')}
+              ${data.programs.length ? '</ul>' : ''} 
+              
+              <h2 class="search-overlay__section-title">Professors</h2>
+              ${data.professors.length ? '<ul class="professor-cards">' : `<p>No professors match that search.</p>`}
+              ${data.professors.map(item => `
+              <li class="professor-card__list-item">
+              <a class="professor-card" href="${item.permalink}">
+                <img class="professor-card__image" src="${item.image}" alt="professor_image">
+                <span class="professor-card__name">${item.title}</span>
+              </a>
+            </li> 
+              `).join('')}
+              ${data.professors.length ? '</ul>' : ''} 
+            </div>  
+
+            <div class="one-third">
+              <h2 class="search-overlay__section-title">Campuses</h2>
+              ${data.campuses.length ? '<ul class="link-list min-list">' : `<p>No campuses match that search.<a href="${universityData.root_url}/campuses">View all campuses</a></p>`}
+              ${data.campuses.map(item => `<li><a href="${item.permalink}">${item.title}</a></li>`).join('')}
+              ${data.campuses.length ? '</ul>' : ''} 
+              
+              <h2 class="search-overlay__section-title">Events</h2>
+              ${data.events.length ? '' : `<p>No events match that search.<a href="${universityData.root_url}/events">View all events</a></p>`}
+              ${data.events.map(item => `
+              <div class="event-summary">
+              <a class="event-summary__date t-center" href="${item.permalink}">
+                  <span class="event-summary__month">${item.month}</span>
+                  <span class="event-summary__day">${item.day}</span>  
+              </a>
+              <div class="event-summary__content">
+                  <h5 class="event-summary__title headline headline--tiny"><a href="${item.permalink}">${item.title}</a></h5>
+              <p> ${item.description} <a href="${item.permalink}" class="nu gray">Learn more</a></p> 
+              </div>
+          </div>
+              `).join('')}
+            </div>
+          </div> 
+      `);
+      this.isSpinnerVisible = false; 
+    });
+  }
 
     keyPressDispatcher(e) {
         //s key functionality + if another input on the page is focused then pressing s key won't open overlap
