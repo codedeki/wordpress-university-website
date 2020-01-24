@@ -2,6 +2,8 @@
 
 //Campus Post Type
 register_post_type('campus', array(
+   'capability_type' => 'campus',  //NEED FOR NEW CUSTOM USER permissions with Members PlugIn
+   'map_meta_cap' => true,  //NEED FOR NEW CUSTOM USER permissions with Members PlugIn
    'supports' => array('title', 'editor', 'excerpt'), //custom fields: ACF or CMB2 plugins
    'rewrite' => array('slug' => 'campuses'), 
    'has_archive' => true, 
@@ -19,6 +21,8 @@ register_post_type('campus', array(
 
 //Event Post Type
 register_post_type('event', array(
+   'capability_type' => 'event', //makes event a unique event type to edit rather than default as post type
+   'map_meta_cap' => true, //map and require the right capabilities: ensures appropriate permissions are needed for users who edit the event type
    'supports' => array('title', 'editor', 'excerpt'), //custom fields: ACF or CMB2 plugins
    'rewrite' => array('slug' => 'events'), 
    'has_archive' => true, 

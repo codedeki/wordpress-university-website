@@ -117,7 +117,6 @@ function universityMapKey($api) {
 add_filter('acf/fields/google_map/api', 'universityMapKey' ); //google maps api
 
 
-
 //Redirect subscriber accounts out of admin and onto homepage (even if type /wp-admin in url)
 add_action('admin_init', 'redirectSubsToFrontend');
 
@@ -163,7 +162,6 @@ function ourLoginCSS() {
 add_filter('login_headertitle', 'ourLoginTitle');
 
 //Customize Login Screen Text
-
 function ourLoginTitle() {
     return get_bloginfo('name'); //get our site name
 }
