@@ -123,6 +123,7 @@ class Search {
         this.searchField.val('');
         setTimeout(() => this.searchField.focus(), 301);
         this.isOverlayOpen = true;
+        return false; //prevents default behavior of a or link element when clicking on search button in top right corner (see header.php <a href="<?php esc_url(site_url('/search'))
     }
     
     closeOverlay() {
