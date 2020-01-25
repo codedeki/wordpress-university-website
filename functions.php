@@ -51,7 +51,10 @@ function marsuniversity_files() {
     wp_enqueue_style('university_main_styles', get_stylesheet_uri());
     //input js into html
     wp_localize_script('university_main_js', 'universityData', array(
-        'root_url' => get_site_url()    //make dynamic relative link for deployement: invent key called root_url to store whatever site url the user enters; makes sure the user can dynamically load the JSON data from the HTTP request in Search.js getResults();
+        'root_url' => get_site_url(),
+        'nonce' => wp_create_nonce('wp_rest') //randomly generate number for each user session when logged in
+        //nonce = number only used once
+        //make dynamic relative link for deployement: invent key called root_url to store whatever site url the user enters; makes sure the user can dynamically load the JSON data from the HTTP request in Search.js getResults();
     )); 
 }
 
