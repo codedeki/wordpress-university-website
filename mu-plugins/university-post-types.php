@@ -18,7 +18,6 @@ register_post_type('campus', array(
    'menu_icon' => 'dashicons-location-alt' 
 ));
 
-
 //Event Post Type
 register_post_type('event', array(
    'capability_type' => 'event', //makes event a unique event type to edit rather than default as post type
@@ -66,6 +65,22 @@ register_post_type('professor', array(
        'singular_name' => 'Professor' 
    ),
    'menu_icon' => 'dashicons-welcome-learn-more' 
+));
+
+//Note Post Type
+register_post_type('note', array(
+   'show_in_rest' => true,
+   'supports' => array('title', 'editor'), //custom fields: ACF or CMB2 plugins
+   'public' => false,
+   'show_ui' => true, //show in admin dashboard desipte false for public searches
+   'labels' => array(
+       'name' => 'Notes',
+       'add_new_item' => 'Add New Note',
+       'edit_item' => 'Edit Notes',
+       'all_items' => 'All Notes',
+       'singular_name' => 'Note' 
+   ),
+   'menu_icon' => 'dashicons-welcome-write-blog'  
 ));
 
 } 
