@@ -6,6 +6,10 @@ function university_custom_rest() {
     register_rest_field('post', 'authorName', array(
         'get_callback' => function() {return get_the_author();} 
     ));
+//register user note count to use in MyNotes.js
+    register_rest_field('note', 'userNoteCount', array(
+        'get_callback' => function() {return count_user_posts(get_current_user_id(), 'note');} 
+    ));
 }
 
 add_action('rest_api_init', 'university_custom_rest');
@@ -168,5 +172,24 @@ add_filter('login_headertitle', 'ourLoginTitle');
 function ourLoginTitle() {
     return get_bloginfo('name'); //get our site name
 }
+
+//SECURITY UPDATE: Force Note Posts that exist and aren't deleted by user to Be Private in Back End with wp_insert_post_data function
+add_filter('wp_insert_post_data', 'makeNoteSecure', 10, 2); //10 default priority(lower the # the earlier function runs), 2 paramaters
+
+function makeNoteSecure($data, $postarr) {
+    if($data['post_type'] == 'note') {
+        //limit user to make no more than 4 note posts and ensure we can still delete/edit posts after reaching limit (only new posts have an ID #, so ID is passed into second param as second condition)
+        if(count_user_posts(get_current_user_id(), 'note') > 4 AND !$postarr['ID']) {
+            die("You have reached your note limit."); //die prevents below code from running if reach limit of 4
+        }
+        $data['post_content'] = sanitize_textarea_field($data['post_content']); //sanitize whatever user submits to body of note (remove JS and HTML tags for security reasons)
+        $data['post_title'] = sanitize_text_field($data['post_title']); //sanitize title of note
+    }
+    if($data['post_type'] == 'note' AND $data['post_status'] != 'trash') {  
+        $data['post_status'] = "private"; 
+    }
+
+    return $data; //all data about post saved into database
+} 
 
 ?>
