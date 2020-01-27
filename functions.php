@@ -121,7 +121,6 @@ function universityMapKey($api) {
     return $api;
 }
 
-
 add_filter('acf/fields/google_map/api', 'universityMapKey' ); //google maps api
 
 
@@ -137,7 +136,6 @@ function redirectSubsToFrontend() {
         exit; // stop code once complete 
     }
 }
-
 
 //Hide admin bar for subscriber accounts
 add_action('wp_loaded', 'noSubsAdminBar');
