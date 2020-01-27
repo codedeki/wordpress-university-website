@@ -33,7 +33,7 @@ register_post_type('event', array(
        'all_items' => 'All Events',
        'singular_name' => 'Event' 
    ),
-   'menu_icon' => 'dashicons-calendar-alt' 
+   'menu_icon' => 'dashicons-calendar-alt'
 ));
 
 //Program Post Type
@@ -83,6 +83,21 @@ register_post_type('note', array(
        'singular_name' => 'Note' 
    ),
    'menu_icon' => 'dashicons-welcome-write-blog'  
+));
+
+//Like Post Type
+register_post_type('like', array(
+   'supports' => array('title'), //custom fields: ACF or CMB2 plugins
+   'public' => false,
+   'show_ui' => true, //show in admin dashboard desipte false for public searches
+   'labels' => array(
+       'name' => 'Likes',
+       'add_new_item' => 'Add New Like',
+       'edit_item' => 'Edit Likes',
+       'all_items' => 'All Likes',
+       'singular_name' => 'Like' 
+   ),
+   'menu_icon' => 'dashicons-heart'   
 ));
 
 } 

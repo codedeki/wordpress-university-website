@@ -23,6 +23,7 @@ while(have_posts()) {
         <textarea class="new-note-body" placeholder="Your note here..."></textarea>
         <span class="submit-note">Create Note</span>
         <span class="note-limit-message">You have reached your note limit. Delete an existing note to make room for a new one!</span>
+        <span class="note-empty-message">Both the title and content are required fields.</span>  
     </div>
 
      <ul class="min-list link-list" id="my-notes">

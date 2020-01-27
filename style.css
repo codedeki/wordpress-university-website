@@ -862,7 +862,24 @@ p, li {
   margin-left: 10px;
 }
 
-.note-limit-message {
+.note-empty-message { 
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: all .3s ease-out;
+  transition: all .3s ease-out;
+  color: #c32929;
+  font-weight: bold;
+}
+
+.note-empty-message.active {  
+  position: absolute; 
+  left: 10rem; 
+  top: 24.5rem;
+  visibility: visible;
+  opacity: 1;
+}
+
+.note-limit-message { 
   visibility: hidden;
   opacity: 0;
   -webkit-transition: all .3s ease-out;

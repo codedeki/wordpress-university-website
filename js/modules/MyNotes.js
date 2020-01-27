@@ -114,11 +114,20 @@ class MyNotes {
                 `).prependTo("#my-notes").hide().slideDown();
                 console.log("Congrats, request successful");
                 console.log(response);
+                if(response.title.raw !== "") { 
+                    $(".note-empty-message").removeClass("active");    
+                } 
             },
             error: (response) => { 
+                //show error in UI if note empty
+                if(response.responseText == "Both the title and content are required fields.") { 
+                    $(".note-empty-message").addClass("active");  
+                    $(".note-limit-message").removeClass("active");      
+                }
                 //show error message in UI if over note limit 
                 if(response.responseText == "You have reached your note limit.") {
                     $(".note-limit-message").addClass("active"); 
+                    $(".note-empty-message").removeClass("active");     
                 }
                 console.log("Sorry, request failed"); 
                 console.log(response);
